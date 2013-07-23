@@ -60,6 +60,6 @@ httpServer = http.createServer(function(request, response) {
 	}
 });
 
-logger.info('******** PostDog Start! ******** (port: ' + conf.get('tcp-port') + ')');
+logger.info('********** PostDog Start! ********** (tcp:'+conf.get('tcp-port') + ', http:'+conf.get('http-port') + ')');
 tcpServer.listen(conf.get('tcp-port'));
 httpServer.listen(conf.get('http-port'));
