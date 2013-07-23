@@ -1,4 +1,6 @@
+var http = require('http');
 var net = require('net');
+var url = require('url');
 var conf = require('nconf')
 var log4js = require('log4js');
 
@@ -8,12 +10,12 @@ conf.use('file', { file: './postdog-conf.json' });
 conf.load()
 
 var format = {
-	sockMsg: function(sock, msg) {
+	sockMsg : function(sock, msg) {
 		return sock.remoteAddress + ':' + sock.remotePort + ' [' + msg.length + ' bytes]';
 	}
-}
+};
 
-var server = net.createServer(function(clientSock) {
+var tcpServer = net.createServer(function(clientSock) {
 	clientSock.on('data', function(msg) {
 		logger.info('recv ' + format.sockMsg(clientSock, msg));
 
@@ -44,5 +46,20 @@ var server = net.createServer(function(clientSock) {
 	});
 });
 
-logger.info('******** PostDog Start! ******** (port: ' + conf.get('local:port') + ')');
-server.listen(conf.get('local:port'));
+httpServer = http.createServer(function(request, response) {
+	var ip = request.connection.remoteAddress;
+	var key = url.parse(request.url, true).query['key'];
+	logger.info('conf request from ' + ip + ', key: ' + key);
+	if (key == 'LingoSail') {
+		conf.set('remote:host', ip);
+		conf.save();
+		logger.info('conf updated');
+		response.end('ok');
+	} else {
+		response.end();
+	}
+});
+
+logger.info('******** PostDog Start! ******** (port: ' + conf.get('tcp-port') + ')');
+tcpServer.listen(conf.get('tcp-port'));
+httpServer.listen(conf.get('http-port'));
