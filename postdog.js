@@ -22,7 +22,7 @@ var tcpServer = net.createServer(function(clientSock) {
 		var serverSock = new net.Socket();
 		serverSock.setTimeout(conf.get('timeout'));
 
-		serverSock.connect(conf.get('remote:port'), conf.get('remote:port'), function () {
+		serverSock.connect(conf.get('remote:port'), conf.get('remote:host'), function () {
 			logger.debug('send ' + format.sockMsg(serverSock, msg));
 			serverSock.write(msg);
 		});
