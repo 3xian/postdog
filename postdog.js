@@ -6,11 +6,11 @@ var log4js = require('log4js');
 
 var logger = log4js.getLogger();
 
-conf.use('file', { file : './postdog-conf.json' });
+conf.use('file', { file: './postdog-conf.json' });
 conf.load()
 
 var format = {
-	sockMsg : function(sock, msg) {
+	sockMsg: function(sock, msg) {
 		return sock.remoteAddress + ':' + sock.remotePort + ' [' + msg.length + ' bytes]';
 	}
 };

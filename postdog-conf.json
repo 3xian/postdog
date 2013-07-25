@@ -1,5 +1,5 @@
 {
-  "timeout": 10000,
+  "timeout": 8000,
   "tcp-port": 6512,
   "http-port": 7512,
   "remote": {
